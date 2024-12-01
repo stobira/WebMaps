@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Add a new layer below labels</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoib2JpcmEiLCJhIjoiY20yeW5zMWt0MDJrdTJsczd3cHhkY2d6dCJ9.858ME-MQUA2XNVZLVmRROA';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/obira/cm38idv7i01ho01o0gr5rcyft',
+        center: [39.50210, 4.98375],
+        zoom: 4.06
+     
+    });
+
+    map.on('load', () => {
+        const layers = map.getStyle().layers;
+        // Find the index of the first symbol layer in the map style.
+        let firstSymbolId;
+        for (const layer of layers) {
+            if (layer.type === 'symbol') {
+                firstSymbolId = layer.id;
+                break;
+            }
+        }
+
+        map.addSource('wajir', {
+    type: 'geojson',
+    data: 'wajir/wajir.geojson'
+});
+
+map.addSource('somalia', {
+    type: 'geojson',
+    data: 'wajir/somalia.geojson'
+});
+
+map.addSource('ManderaSubCounties', {
+    type: 'geojson',
+    data: 'wajir/ManderaSubCounties.geojson'
+});
+
+map.addSource('ManderaNewSubCounties', {
+    type: 'geojson',
+    data: 'wajir/ManderaNewSubCounties.geojson'
+});
+
+map.addSource('Woreda_Oromia', {
+    type: 'geojson',
+    data: 'wajir/Woreda_Oromia.geojson'
+});
+
+map.addSource('Woreda_Somali', {
+    type: 'geojson',
+    data: 'wajir/Woreda_Somali.geojson'
+});
+
+map.addSource('Nairobi', {
+    type: 'geojson',
+    data: 'wajir/Nairobi.geojson'
+});
+
+   // Add a layer showing Wajir.
+   map.addLayer({
+            id: 'wajir-layer',
+            type: 'fill',
+            source: 'wajir',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        // Add a layer showing Somalia.
+   map.addLayer({
+            id: 'somalia-layer',
+            type: 'fill',
+            source: 'somalia',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        map.addLayer({
+            id: 'ManderaSubCounties-layer',
+            type: 'fill',
+            source: 'ManderaSubCounties',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+            }
+        });
+
+        map.addLayer({
+            id: 'ManderaNewSubCounties-layer',
+            type: 'fill',
+            source: 'ManderaNewSubCounties',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        map.addLayer({
+            id: 'Woreda_Oromia-layer',
+            type: 'fill',
+            source: 'Woreda_Oromia',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        map.addLayer({
+            id: 'Woreda_Somali-layer',
+            type: 'fill',
+            source: 'Woreda_Somali',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        map.addLayer({
+            id: 'Nairobi-layer',
+            type: 'fill',
+            source: 'Nairobi',
+            paint: {
+                "fill-color": "#fbbc45",
+                "fill-outline-color": "black"
+
+            }
+        });
+
+        // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'somalia-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM2_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'somalia-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'somalia-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+        // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'wajir-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM2_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'wajir-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'wajir-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+        // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'ManderaSubCounties-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM2_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'ManderaSubCounties-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'ManderaSubCounties-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+// When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'ManderaNewSubCounties-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.shapeName)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'ManderaNewSubCounties-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'ManderaNewSubCounties-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+       // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'Woreda_Oromia-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM3_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'Woreda_Oromia-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'Woreda_Oromia-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+
+        // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'Woreda_Somali-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM3_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'Woreda_Somali-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'Woreda_Somali-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+        // When a click event occurs on a feature in the states layer,
+        // open a popup at the location of the click, with description
+        // HTML from the click event's properties.
+        map.on('click', 'Nairobi-layer', (e) => {
+            new mapboxgl.Popup()
+                .setLngLat(e.lngLat)
+                .setHTML(e.features[0].properties.ADM1_EN)
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when
+        // the mouse is over the states layer.
+        map.on('mouseenter', 'Nairobi-layer', () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change the cursor back to a pointer
+        // when it leaves the states layer.
+        map.on('mouseleave', 'Nairobi-layer', () => {
+            map.getCanvas().style.cursor = '';
+        });
+
+
+    });
+</script>
+
+</body>
+</html>
